@@ -65,7 +65,9 @@ $dropzone-overlay-background-error: color('red', 'lighter');
 }
 
 .Container {
+  display: flex;
   flex: 1;
+  justify-content: center;
 }
 
 .Overlay {
