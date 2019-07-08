@@ -91,12 +91,12 @@ class FileUpload extends React.Component<CombinedProps, State> {
   }
 
   render() {
-    const fileUploadMarkup = this.renderFileUploadMarkup();
+    const fileUploadMarkup = this.getFileUploadMarkup();
 
     return <div className={styles.FileUpload}>{fileUploadMarkup}</div>;
   }
 
-  private renderFileUploadMarkup() {
+  private getFileUploadMarkup() {
     const {
       context: {width, height, type},
     } = this.props;
