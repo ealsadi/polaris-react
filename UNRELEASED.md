@@ -14,6 +14,8 @@ Use [the changelog guidelines](https://git.io/polaris-changelog-guidelines) to f
 
 ### Bug fixes
 
+- Fixed the `SearchInput` clear button which was overflowing the search bar in Firefox 65+
+
 ### Documentation
 
 ### Development workflow
