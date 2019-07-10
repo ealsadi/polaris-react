@@ -6,13 +6,11 @@ import {StickyManager} from 'utilities/sticky-manager';
 import {I18n} from 'utilities/i18n';
 import {Link} from 'utilities/link';
 import {TestProvider} from '../react-testing';
-import {createPolarisContext} from '../../utilities/create-polaris-context';
 
 describe('TestProvider', () => {
   it('renders in strict mode', () => {
     const testProvider = mount(
       <TestProvider
-        polaris={createPolarisContext()}
         themeProvider={createThemeContext()}
         frame={{
           showToast: noop,

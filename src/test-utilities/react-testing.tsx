@@ -1,7 +1,6 @@
 import React from 'react';
 import {createMount} from '@shopify/react-testing';
 import {ClientApplication} from '@shopify/app-bridge';
-import {createPolarisContext} from '../utilities/create-polaris-context';
 // eslint-disable-next-line shopify/strict-component-boundaries
 import {FrameContext, FrameContextType} from '../components/Frame';
 import {
@@ -21,13 +20,11 @@ import {
 } from '../utilities/app-bridge';
 import {I18n, I18nContext, TranslationDictionary} from '../utilities/i18n';
 import translations from '../../locales/en.json';
-import {PolarisContext} from '../components/types';
 import {DeepPartial} from '../types';
 import {merge} from '../utilities/merge';
 import {Link, LinkContext, LinkLikeComponent} from '../utilities/link';
 
 interface ComplexProviders {
-  polaris: PolarisContext;
   themeProvider: ThemeProviderContextType;
   frame: FrameContextType;
 }
@@ -60,14 +57,20 @@ function noop() {}
 
 export function TestProvider({
   children,
-  polaris,
-  themeProvider,
-  frame,
-  intl,
-  scrollLockManager,
-  stickyManager,
-  appBridge,
-  link,
+  themeProvider = createThemeContext(),
+  frame = {
+    showToast: noop,
+    hideToast: noop,
+    setContextualSaveBar: noop,
+    removeContextualSaveBar: noop,
+    startLoading: noop,
+    stopLoading: noop,
+  },
+  intl = new I18n(translations),
+  scrollLockManager = new ScrollLockManager(),
+  stickyManager = new StickyManager(),
+  appBridge = null,
+  link = new Link(undefined),
   ...props
 }: Props) {
   const childWithProps =
@@ -98,7 +101,6 @@ export function TestProvider({
 
 export const mountWithContext = createMount<Options, Context>({
   context({
-    polaris,
     themeProvider,
     frame,
     intl,
@@ -107,11 +109,6 @@ export const mountWithContext = createMount<Options, Context>({
     appBridge,
     link,
   }) {
-    const polarisContextDefault = createPolarisContext();
-    const polarisContext =
-      (polaris && merge(polarisContextDefault, polaris)) ||
-      polarisContextDefault;
-
     const intlTranslations =
       (intl && merge(translations, intl)) || translations;
     const intlContext = new I18n(intlTranslations);
@@ -150,7 +147,6 @@ export const mountWithContext = createMount<Options, Context>({
     const linkContext = new Link(link);
 
     return {
-      polaris: polarisContext,
       themeProvider: themeProviderContext,
       frame: frameContext,
       intl: intlContext,
@@ -163,7 +159,6 @@ export const mountWithContext = createMount<Options, Context>({
   render(
     element,
     {
-      polaris,
       themeProvider,
       frame,
       intl,
@@ -175,7 +170,6 @@ export const mountWithContext = createMount<Options, Context>({
   ) {
     return (
       <TestProvider
-        polaris={polaris}
         intl={intl}
         scrollLockManager={scrollLockManager}
         stickyManager={stickyManager}
